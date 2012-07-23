@@ -48,6 +48,6 @@ build() {
 }
 
 package() {
-   cd "$srcdir/$_hgrepo-build"
+   cd "$srcdir/$_hgrepo-build/release"
    make DESTDIR="$pkgdir/" install
 }
