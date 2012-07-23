@@ -1,5 +1,5 @@
 # Maintainer: Mathis Antony <sveitser@gmail.com>
-pkgname=libjson-ninja
+pkgname=libjson-headers
 pkgver=7.6.1
 pkgrel=1
 epoch=
@@ -32,8 +32,6 @@ build() {
   sed -i.bak '/#define JSON_BINARY/d' JSONOptions.h
   sed -i.bak '/#define JSON_EXPOSE_BASE64/d' JSONOptions.h
   sed -i.bak '/#ifdef JSON_DEBUG/,+17d' _internal/Source/JSONDefs.h
-  unset CXXFLAGS
-  make
 }
 
 package() {
@@ -41,8 +39,17 @@ package() {
   unset CXXFLAGS
   sed -i.bak '/cp -rv $(srcdir)\/Dependencies\/ $(include_path)\/$(libname_hdr)\/$(srcdir)/d' \
     makefile 
-  make install prefix="$pkgdir/usr" 
-  rm "$pkgdir/usr/lib"
+   
+  make install_headers prefix="$pkgdir/usr" 
+
+  ### To install shared/static libraries see below 
+  ### and change build() step accordingly
+
+  # create directory for libjson.a
+  # sed -i.bak '/mkdir -p $(objdir)/a\\tmkdir -p $(inst_path)\/libjson' makefile
+  # make install prefix="$pkgdir/usr" 
+  # move libjson.a to avoid conflict with json-c
+  # mv "$pkgdir/usr/lib/libjson.a" "$pkgdir/usr/lib/libjson/"
 }
 
 # vim:set ts=2 sw=2 et:
