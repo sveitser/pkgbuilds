@@ -1,0 +1,42 @@
+# Maintainer: Mathis Antony <sveitser@gmail.com>
+pkgname=libjson-ninja
+pkgver=7.6.0
+pkgrel=1
+epoch=
+pkgdesc="A JSON reader and writer which is super-effiecient and usually runs
+circles around other JSON libraries."
+arch=('i686' 'x86_64')
+url="http://sourceforge.net/projects/libjson"
+license=('custom')
+groups=()
+depends=()
+makedepends=('unzip')
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=(strip)
+install=
+changelog=
+source=(http://sourceforge.net/projects/libjson/files/libjson\_$pkgver.zip)
+noextract=(libjson\_$pkgver.zip)
+md5sums=('82f3fcbf9f8cf3c4e25e1bdd77d65164')
+
+build() {
+  cd $srcdir
+  unzip -o "libjson_$pkgver.zip" 
+  patch -N -p0 -i "$startdir/libjson.patch"
+  cd libjson
+  unset CXXFLAGS
+  make
+}
+
+package() {
+  cd "$srcdir/libjson"
+  unset CXXFLAGS
+  make install_headers prefix="$pkgdir/usr" 
+}
+
+# vim:set ts=2 sw=2 et:
