@@ -1,6 +1,6 @@
 # Maintainer: Mathis Antony <sveitser@gmail.com>
 pkgname=libjson-ninja
-pkgver=7.6.0
+pkgver=7.6.1
 pkgrel=1
 epoch=
 pkgdesc="A JSON reader and writer which is super-effiecient and usually runs
@@ -17,7 +17,7 @@ provides=()
 conflicts=()
 replaces=()
 backup=()
-options=(strip)
+options=()
 install=
 changelog=
 source=(http://sourceforge.net/projects/libjson/files/libjson\_$pkgver.zip)
@@ -27,8 +27,11 @@ md5sums=('82f3fcbf9f8cf3c4e25e1bdd77d65164')
 build() {
   cd $srcdir
   unzip -o "libjson_$pkgver.zip" 
-  patch -N -p0 -i "$startdir/libjson.patch"
   cd libjson
+  sed -i.bak '/#define JSON_LIBRARY/d' JSONOptions.h
+  sed -i.bak '/#define JSON_BINARY/d' JSONOptions.h
+  sed -i.bak '/#define JSON_EXPOSE_BASE64/d' JSONOptions.h
+  sed -i.bak '/#ifdef JSON_DEBUG/,+17d' _internal/Source/JSONDefs.h
   unset CXXFLAGS
   make
 }
@@ -36,7 +39,10 @@ build() {
 package() {
   cd "$srcdir/libjson"
   unset CXXFLAGS
-  make install_headers prefix="$pkgdir/usr" 
+  sed -i.bak '/cp -rv $(srcdir)\/Dependencies\/ $(include_path)\/$(libname_hdr)\/$(srcdir)/d' \
+    makefile 
+  make install prefix="$pkgdir/usr" 
+  rm "$pkgdir/usr/lib"
 }
 
 # vim:set ts=2 sw=2 et:
