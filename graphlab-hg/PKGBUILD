@@ -1,6 +1,6 @@
 # Maintainer: Mathis Antony <sveitser@gmail.com>
 pkgname=graphlab-hg
-pkgver=2
+pkgver=4197
 pkgrel=1
 pkgdesc="GraphLab is a new parallel framework for machine learning."
 arch=('i686' 'x86_64')
@@ -36,7 +36,7 @@ build() {
 
   ./configure -D PYTHON_EXECUTABLE=/usr/bin/python2 \
     --prefix=/usr
-  cp ../../tcmalloc.patch patches/
+  cp "$startdir/tcmalloc.patch" patches/
   sed '/ExternalProject_Add(libtcmalloc/a \
     PATCH_COMMAND patch -N -p0 -i ${GraphLab_SOURCE_DIR}/patches/tcmalloc.patch || true' \
     CMakeLists.txt > CMakeLists2.txt
