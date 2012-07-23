@@ -39,10 +39,9 @@ build() {
   ./configure -D PYTHON_EXECUTABLE=/usr/bin/python2 \
     --prefix=/usr
   cp "$startdir/tcmalloc.patch" patches/
-  sed '/ExternalProject_Add(libtcmalloc/a \
+  sed -i.bak '/ExternalProject_Add(libtcmalloc/a \
     PATCH_COMMAND patch -N -p0 -i ${GraphLab_SOURCE_DIR}/patches/tcmalloc.patch || true' \
-    CMakeLists.txt > CMakeLists2.txt
-  mv CMakeLists2.txt CMakeLists.txt
+    CMakeLists.txt 
     
   cd release
   unset CXXFLAGS
