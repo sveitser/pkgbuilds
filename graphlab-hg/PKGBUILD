@@ -1,6 +1,6 @@
 # Maintainer: Mathis Antony <sveitser@gmail.com>
 pkgname=graphlab-hg
-pkgver=4197
+pkgver=4198
 pkgrel=1
 pkgdesc="GraphLab is a new parallel framework for machine learning."
 arch=('i686' 'x86_64')
@@ -43,6 +43,7 @@ build() {
   mv CMakeLists2.txt CMakeLists.txt
     
   cd release
+  unset CXXFLAGS
   make 
 }
 
