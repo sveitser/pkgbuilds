@@ -1,6 +1,0 @@
-post_install() {
-  echo ""
-  echo "To link graphlab use:"
-  echo "-lpthread -lmpi -ldl -lhwloc -levent -lmpi_cxx -lboost_system"
-  echo "-levent_pthreads -lboost_program_options -lgraphlab"
-}
