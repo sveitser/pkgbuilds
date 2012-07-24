@@ -45,7 +45,7 @@ build() {
     
   cd release
   unset CXXFLAGS
-  make -j 4
+  make -j 2
 }
 
 package() {
