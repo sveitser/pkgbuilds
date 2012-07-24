@@ -1,12 +1,12 @@
 # Maintainer: Mathis Antony <sveitser@gmail.com>
 pkgname=graphlab-hg
-pkgver=4209
+pkgver=4214
 pkgrel=1
 pkgdesc="GraphLab is a new parallel framework for machine learning."
 arch=('i686' 'x86_64')
 url="http://www.graphlab.org"
 license=('apache')
-depends=('python2' 'boost' 'zlib')
+depends=('python2' 'boost' 'zlib' 'libevent')
 optdepends=('jdk7-openjdk: Required for HDFS support'
             'openmpi: Required for running GraphLab distributed')            
 makedepends=('cmake' 'mercurial' 'apache-ant')
