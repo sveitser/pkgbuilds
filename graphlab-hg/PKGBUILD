@@ -1,6 +1,6 @@
 # Maintainer: Mathis Antony <sveitser@gmail.com>
 pkgname=graphlab-hg
-pkgver=4214
+pkgver=4220
 pkgrel=1
 pkgdesc="GraphLab is a new parallel framework for machine learning."
 arch=('i686' 'x86_64')
@@ -37,7 +37,7 @@ build() {
   cd "$srcdir/$_hgrepo-build"
 
   ./configure -D PYTHON_EXECUTABLE=/usr/bin/python2 \
-    --prefix=/usr
+    --prefix=/usr --no_jvm
   cp "$startdir/tcmalloc.patch" patches/
   sed -i.bak '/ExternalProject_Add(libtcmalloc/a \
     PATCH_COMMAND patch -N -p0 -i ${GraphLab_SOURCE_DIR}/patches/tcmalloc.patch || true' \
@@ -45,7 +45,7 @@ build() {
     
   cd release
   unset CXXFLAGS
-  make -j 2
+  make -j 6
 }
 
 package() {
