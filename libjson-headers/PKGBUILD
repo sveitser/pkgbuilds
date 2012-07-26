@@ -20,8 +20,8 @@ backup=()
 options=()
 install=
 changelog=
-source=(http://sourceforge.net/projects/libjson/files/libjson\_$pkgver.zip)
-noextract=(libjson\_$pkgver.zip)
+source=(http://voxel.dl.sourceforge.net/project/libjson/libjson_$pkgver.zip)
+noextract=(libjson_$pkgver.zip)
 md5sums=('82f3fcbf9f8cf3c4e25e1bdd77d65164')
 
 build() {
