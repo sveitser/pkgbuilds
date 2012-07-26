@@ -1,0 +1,54 @@
+# Maintainer: Mathis Antony <sveitser@gmail.com>
+pkgname=graphlab-hg
+pkgver=4220
+pkgrel=1
+pkgdesc="GraphLab is a new parallel framework for machine learning."
+arch=('i686' 'x86_64')
+url="http://www.graphlab.org"
+license=('apache')
+depends=('python2' 'boost' 'zlib' 'libevent')
+optdepends=('jdk7-openjdk: Required for HDFS support'
+            'openmpi: Required for running GraphLab distributed')            
+makedepends=('cmake' 'mercurial' 'apache-ant')
+options=()
+source=(tcmalloc.patch)
+md5sums=('11bc88f68b4dcf214255a3b7de1f8ede')
+
+_hgroot=https://code.google.com/p
+_hgrepo=graphlabapi
+
+build() {
+
+   cd "$srcdir"
+   msg "Connecting to Mercurial server...."
+   if [[ -d "$_hgrepo" ]]; then
+     cd "$_hgrepo"
+     hg pull -u
+     msg "The local files are updated."
+   else
+     hg clone "$_hgroot" "$_hgrepo"
+   fi
+
+  msg "Mercurial checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_hgrepo-build"
+  cp -r "$srcdir/$_hgrepo" "$srcdir/$_hgrepo-build"
+  cd "$srcdir/$_hgrepo-build"
+
+  ./configure -D PYTHON_EXECUTABLE=/usr/bin/python2 \
+    --prefix=/usr --no_jvm
+  cp "$startdir/tcmalloc.patch" patches/
+  sed -i.bak '/ExternalProject_Add(libtcmalloc/a \
+    PATCH_COMMAND patch -N -p0 -i ${GraphLab_SOURCE_DIR}/patches/tcmalloc.patch || true' \
+    CMakeLists.txt 
+    
+  cd release
+  unset CXXFLAGS
+  make -j 6
+}
+
+package() {
+   cd "$srcdir/$_hgrepo-build/release"
+   make DESTDIR="$pkgdir/" install
+}
