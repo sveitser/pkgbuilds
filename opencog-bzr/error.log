@@ -1,0 +1,27 @@
+[ 61%] Building CXX object
+opencog/cython/CMakeFiles/PythonEval.dir/PythonEval.cc.o
+cd /tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build/opencog/cython &&
+/usr/bin/c++   -DPythonEval_EXPORTS -DHAVE_EXPAT -DHAVE_GSL -DHAVE_GUILE
+-DHAVE_MPI -DHAVE_PROTOBUF -DHAVE_CYTHON -DHAVE_SQL_STORAGE -DHAVE_VALGRIND
+-DHAVE_ZMQ -DHAVE_UBIGRAPH -Wall -fPIC -Wno-variadic-macros -fopenmp
+-std=gnu++0x -ggdb3 -fstack-protector -fPIC
+-I/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build
+-I/usr/include/python3.2mu
+-I/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build/opencog/cython
+-DPROJECT_SOURCE_DIR=\"/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build\"
+-DPROJECT_BINARY_DIR=\"/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build\"
+-DCONFDIR=\"/etc\" -DDATADIR=\"/usr/share/opencog\" -o
+CMakeFiles/PythonEval.dir/PythonEval.cc.o -c
+/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build/opencog/cython/PythonEval.cc
+/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build/opencog/cython/PythonEval.cc:
+In member function ‘void opencog::PythonEval::printDict(PyObject*)’:
+/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build/opencog/cython/PythonEval.cc:170:43:
+error: ‘PyString_AsString’ was not declared in this scope
+make[2]: *** [opencog/cython/CMakeFiles/PythonEval.dir/PythonEval.cc.o] Error 1
+make[2]: Leaving directory
+`/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build'
+make[1]: *** [opencog/cython/CMakeFiles/PythonEval.dir/all] Error 2
+make[1]: Leaving directory
+`/tmp/packerbuild-1000/opencog-bzr/opencog-bzr/src/build'
+make: *** [all] Error 2
+

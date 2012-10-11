@@ -1,7 +1,7 @@
 # Maintainer: Thomas Dziedzic < gostrc at gmail >
 
 pkgname=opencog-bzr
-pkgver=7666
+pkgver=7678
 pkgrel=1
 pkgdesc='OpenCog aims to provide research scientists and software developers with a common platform to build and share artificial intelligence programs.'
 arch=('i686' 'x86_64')
@@ -28,8 +28,26 @@ build() {
   cd build
   
   # use boost filesystem 3, no matter what
-  find . -name "*.*" -exec \
-    sed -i.bak "s/#define BOOST_FILESYSTEM_VERSION 2/#define BOOST_FILESYSTEM_VERSION 3/g" '{}' \;
+  ORIG="#define BOOST_FILESYSTEM_VERSION 2"
+  REP="// as of boost 1.50 there is no version 2, and compiles will fail \\n\
+#include <boost/version.hpp> \\n\
+#if BOOST_VERSION > 104900 \\n\
+#define BOOST_FILESYSTEM_VERSION 3 \\n\
+#else \\n\
+#define BOOST_FILESYSTEM_VERSION 2 \\n\
+#endif"
+  
+  grep -rl "$ORIG" * | xargs sed -i.bak "s=$ORIG=$REP=1"
+
+#    sed -i.bak "s/#define BOOST_FILESYSTEM_VERSION 2/#define \
+#    BOOST_FILESYSTEM_VERSION 3/1" opencog/server/CogServerMain.cc
+ 
+#    sed -i.bak "s/#define BOOST_FILESYSTEM_VERSION 2/#define \
+#    BOOST_FILESYSTEM_VERSION 3/1" opencog/web/WebModule.cc
+    
+
+ sed -i.bak "s/fs_params.max_evals/fs_params.hc_max_evals/1" \
+    opencog/learning/moses/main/moses_exec.cc
 
   # fix boost foreach undefined error
   sed -i.bak '/namespace boost {/ a\
@@ -48,7 +66,7 @@ build() {
     -DPYTHON_EXECUTABLE='/usr/bin/python2' \
     .
 
-  make -j1
+  make -j8
 }
 
 package() {
