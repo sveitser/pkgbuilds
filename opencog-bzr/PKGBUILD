@@ -1,11 +1,7 @@
 # Maintainer: Thomas Dziedzic < gostrc at gmail >
 
 pkgname=opencog-bzr
-<<<<<<< HEAD
 pkgver=7678
-=======
-pkgver=7666
->>>>>>> graphlab-hg
 pkgrel=1
 pkgdesc='OpenCog aims to provide research scientists and software developers with a common platform to build and share artificial intelligence programs.'
 arch=('i686' 'x86_64')
@@ -32,7 +28,6 @@ build() {
   cd build
   
   # use boost filesystem 3, no matter what
-<<<<<<< HEAD
   ORIG="#define BOOST_FILESYSTEM_VERSION 2"
   REP="// as of boost 1.50 there is no version 2, and compiles will fail \\n\
 #include <boost/version.hpp> \\n\
@@ -42,44 +37,26 @@ build() {
 #define BOOST_FILESYSTEM_VERSION 2 \\n\
 #endif"
   
-  grep -rl "$ORIG" * | xargs sed -i.bak "s=$ORIG=$REP=1"
-
-#    sed -i.bak "s/#define BOOST_FILESYSTEM_VERSION 2/#define \
-#    BOOST_FILESYSTEM_VERSION 3/1" opencog/server/CogServerMain.cc
- 
-#    sed -i.bak "s/#define BOOST_FILESYSTEM_VERSION 2/#define \
-#    BOOST_FILESYSTEM_VERSION 3/1" opencog/web/WebModule.cc
-    
-
- sed -i.bak "s/fs_params.max_evals/fs_params.hc_max_evals/1" \
-    opencog/learning/moses/main/moses_exec.cc
-=======
-  find . -name "*.*" -exec \
-    sed -i.bak "s/#define BOOST_FILESYSTEM_VERSION 2/#define BOOST_FILESYSTEM_VERSION 3/g" '{}' \;
->>>>>>> graphlab-hg
-
-  # fix boost foreach undefined error
-  sed -i.bak '/namespace boost {/ a\
-    namespace BOOST_FOREACH = foreach;' opencog/util/foreach.h
+  grep -rl "$ORIG" * | \
+    xargs grep -L "#define BOOST_FILESYSTEM_VERSION 3" | \
+    xargs sed -i.bak "s=$ORIG=$REP=1"
 
   unset LDFLAGS
 
   # use -DCMAKE_BUILD_TYPE=Release to optimize binaries or remove it for debug
   # use -Wno-dev to suppress developer specific warnings
   cmake \
-    -DCMAKE_VERBOSE_MAKEFILE=1 \
-    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX='/usr' \
     -DCMAKE_SKIP_RPATH=ON \
     -DCONFDIR='/etc' \
     -DPYTHON_EXECUTABLE='/usr/bin/python2' \
+    -DPYTHON_LIBRARY=/usr/lib/libpython2.7.so \
+    -DPYTHON_SITE_PACKAGES=/usr/lib/python2.7/site-packages \
+    -DPYTHON_INCLUDE_PATH=/usr/include/python2.7/ \
     .
 
-<<<<<<< HEAD
-  make -j8
-=======
-  make -j1
->>>>>>> graphlab-hg
+  make -j4
 }
 
 package() {
