@@ -1,0 +1,45 @@
+# Maintainer: Mathis <sveitser@gmail.com>
+pkgname=mixxx-git
+pkgver=3312
+pkgrel=1
+pkgdesc="Digital DJ mixing software"
+arch=('i686' 'x86_64')
+url="http://www.mixxx.org/"
+license=('GPL2')
+depends=('libid3tag' 'libmad' 'portaudio' 'qt4' 'libogg' 'libshout' 'libvorbis' 'libsndfile' 'taglib' 'portmidi' 'protobuf')
+makedepends=('git' 'scons>=0.98' 'pkgconfig>=0.15.0')
+optdepends=('faad2: M4A support' 
+	    'mp4v2: M4A support' 
+	    'libshout: Shoutcast support')
+provides=(mixxx)
+conflicts=(mixxx mixxx-bzr mixxx-beta mixxx1.10-bzr mixxx1.11-bzr)
+
+_gitroot=https://github.com/mixxxdj/mixxx
+_gitname=mixxx
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build/$_gitname"
+
+  #
+  # BUILD HERE
+  #
+  scons qtdir=/usr/lib/qt4 prefix=/usr install_root=$pkgdir/usr tuned=1 || return 1
+  scons qtdir=/usr/lib/qt4 prefix=/usr install_root=$pkgdir/usr install || return 1
+}
+
+# vim:set ts=2 sw=2 et:
