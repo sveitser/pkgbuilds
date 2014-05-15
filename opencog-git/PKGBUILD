@@ -1,0 +1,44 @@
+# Maintainer: Thomas Dziedzic < gostrc at gmail >
+
+pkgname=opencog-git
+pkgver=7684
+pkgrel=1
+pkgdesc='OpenCog aims to provide research scientists and software developers with a common platform to build and share artificial intelligence programs.'
+arch=('i686' 'x86_64')
+url='http://www.opencog.org/'
+license=('AGPL3')
+options=('!makeflags')
+depends=('boost-libs' 'unixodbc' 'xmlrpc-c' 'guile' 'gsl' 'xerces-c-2' 'sdl_gfx' 'expat' 'zeromq' 'protobuf' 'python2')
+makedepends=('boost' 'git' 'cmake' 'luabind' 'cxxtest' 'doxygen' 'cython')
+md5sums=('SKIP')
+source=("$pkgname"::'git://github.com/opencog/opencog.git')
+
+build() {
+
+  cd "$srcdir/$pkgname"
+  #rm -rf build
+  mkdir -p build
+  cd build
+  
+  # unset LDFLAGS
+
+  # use -DCMAKE_BUILD_TYPE=Release to optimize binaries or remove it for debug
+  # use -Wno-dev to suppress developer specific warnings
+  cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX='/usr' \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DCONFDIR='/etc' \
+    -DPYTHON_EXECUTABLE='/usr/bin/python2' \
+    -DPYTHON_LIBRARY=/usr/lib/libpython2.7.so \
+    -DPYTHON_SITE_PACKAGES=/usr/lib/python2.7/site-packages \
+    -DPYTHON_INCLUDE_PATH=/usr/include/python2.7/ \
+    ..
+
+  make -j4
+}
+
+package() {
+  cd "$srcdir/$pkgname/build"
+  make PREFIX=/usr DESTDIR="$pkgdir" install 
+}
