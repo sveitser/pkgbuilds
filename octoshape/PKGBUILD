@@ -1,5 +1,5 @@
 pkgname=octoshape-bin
-pkgver=1
+pkgver=2
 pkgrel=1
 pkgdesc="Octoshape plugin"
 url="http://www.octoshape.com"
@@ -7,7 +7,7 @@ license="custom"
 arch=('any')
 depends=('bash' 'zip')
 source=('http://www.octoshape.com/files/octosetup-linux_i386.bin')
-md5sums=('e7af3b9302f42bfd02b7b24e1a3600c1')
+md5sums=('81eac350e7df95513a5a6256220a682f')
 
 build() {
     cd "$srcdir"
@@ -18,8 +18,7 @@ build() {
     cd octoshape
     install -m 755 OctoshapeClient "$pkgdir/opt/octoshape/"
     ln -s "/opt/octoshape/OctoshapeClient" "$pkgdir/usr/bin/octoshape"
-    install -m 755 sua-1011082-0-OctoshapeClientSUA "$pkgdir/opt/octoshape"
+    install -m 755 sua-1401100-0-OctoshapeClientSUA "$pkgdir/opt/octoshape"
     install -m 644 *.* "$pkgdir/opt/octoshape/"
 
 }
-
